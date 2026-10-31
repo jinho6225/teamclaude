@@ -332,6 +332,15 @@ test('an unmeasured Fable window renders an empty Fbl bar; API-key rows pad the 
   assert.equal(oauthRow.length, apiRow.length, 'slot padded so columns stay aligned');
 });
 
+test('a disabled account renders "disabled" dimmed, not bright-black (invisible on Solarized)', () => {
+  const { tui, am } = makeTUI(['a0', 'a1']);
+  am.setEnabled('a0', false);
+  const row = tui._renderAcct(am.accounts[0], 0, 10, true, false);
+  assert.match(stripAnsi(row), /disabled/);
+  assert.ok(row.includes('\x1b[2mdisabled'), 'drawn with SGR 2 (dim) on the default foreground');
+  assert.ok(!row.includes('\x1b[90mdisabled'), 'not ANSI 90 — Solarized maps it to the background');
+});
+
 // ── Reload (R) re-measures quota, not just accounts ──────────────────────────
 
 test('R (sync) also triggers the fleet quota re-measure and logs the count', async () => {

@@ -751,10 +751,12 @@ export class TUI {
     const type = gray(a.type.padEnd(7));
 
     // Status — a manually-disabled account reads "disabled" regardless of its
-    // underlying quota status, since it's out of rotation either way.
+    // underlying quota status, since it's out of rotation either way. Dimmed,
+    // not gray: Solarized-style palettes map bright black (ANSI 90) to the
+    // background colour, which made the label invisible.
     let status;
     if (a.enabled === false) {
-      status = gray('disabled');
+      status = dim('disabled');
     } else {
       switch (a.status) {
         case 'active':    status = isCur ? green('active') : 'active'; break;
